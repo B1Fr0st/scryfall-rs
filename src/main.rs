@@ -7,7 +7,8 @@ async fn main() {
         .build()
         .unwrap();
 
-    let response = client.get("https://api.scryfall.com/cards/named?exact=Black%20Lotus")
+    let response = client
+        .get("https://api.scryfall.com/cards/named?exact=Black%20Lotus")
         .send()
         .await
         .unwrap();
