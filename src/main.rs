@@ -1,7 +1,5 @@
 use reqwest::ClientBuilder;
 use scryfall_rs::structs::Card;
-use scryfall_rs::structs::{Language, Layout, OracleID, ScryfallID};
-
 #[tokio::main]
 async fn main() {
     let client = ClientBuilder::new()
@@ -13,5 +11,5 @@ async fn main() {
         .send()
         .await
         .unwrap();
-    let card: Card = response.json().await.unwrap();
+    let _card: Card = response.json().await.unwrap();
 }
