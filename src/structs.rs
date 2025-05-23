@@ -200,7 +200,7 @@ pub enum ImageType {
     #[serde(rename = "normal")]
     Normal,
     #[serde(rename = "small")]
-    Small
+    Small,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -328,7 +328,7 @@ pub enum PurchaseType {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum Rarity{
+pub enum Rarity {
     #[serde(rename = "common")]
     Common,
     #[serde(rename = "uncommon")]
@@ -344,7 +344,7 @@ pub enum Rarity{
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum SecurityStamp{
+pub enum SecurityStamp {
     #[serde(rename = "oval")]
     Oval,
     #[serde(rename = "triangle")]
@@ -358,8 +358,6 @@ pub enum SecurityStamp{
     #[serde(rename = "heart")]
     Heart,
 }
-
-
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum SetType {
@@ -510,5 +508,4 @@ pub struct Card {
     pub security_stamp: Option<SecurityStamp>,
     pub watermark: Option<String>,
     pub preview: Option<Preview>,
-
 }
