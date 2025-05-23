@@ -1,15 +1,15 @@
-use scryfall_rs::Card;
+use scryfall_rs::ScryfallClient;
 
 #[tokio::main]
 async fn main() {
-    let client = scryfall_rs::ScryfallClient::new("scryfall-rs");
-
-    let response = client
-        .client
-        .get("https://api.scryfall.com/cards/named?exact=Black%20Lotus")
-        .send()
-        .await
-        .unwrap();
-    let card: Card = response.json().await.unwrap();
+    let mut client = ScryfallClient::new("scryfall-rs");
+    let client_card = client.card_named("Grimgrin, Corpse-Born").await;
+    let card = match client_card {
+        Ok(card) => card,
+        Err(err) => {
+            eprintln!("Error: {}", err);
+            return;
+        }
+    };
     dbg!(card);
 }

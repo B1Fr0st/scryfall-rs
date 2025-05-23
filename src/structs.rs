@@ -145,6 +145,52 @@ pub enum Language {
 pub enum Layout {
     #[serde(rename = "normal")]
     Normal,
+    #[serde(rename = "split")]
+    Split,
+    #[serde(rename = "flip")]
+    Flip,
+    #[serde(rename = "transform")]
+    Transform,
+    #[serde(rename = "modal_dfc")]
+    ModalDFC,
+    #[serde(rename = "meld")]
+    Meld,
+    #[serde(rename = "leveler")]
+    Leveler,
+    #[serde(rename = "class")]
+    Class,
+    #[serde(rename = "case")]
+    Case,
+    #[serde(rename = "saga")]
+    Saga,
+    #[serde(rename = "adventure")]
+    Adventure,
+    #[serde(rename = "mutate")]
+    Mutate,
+    #[serde(rename = "prototype")]
+    Prototype,
+    #[serde(rename = "battle")]
+    Battle,
+    #[serde(rename = "planar")]
+    Planar,
+    #[serde(rename = "scheme")]
+    Scheme,
+    #[serde(rename = "vanguard")]
+    Vanguard,
+    #[serde(rename = "token")]
+    Token,
+    #[serde(rename = "double_faced_token")]
+    DoubleFacedToken,
+    #[serde(rename = "emblem")]
+    Emblem,
+    #[serde(rename = "augment")]
+    Augment,
+    #[serde(rename = "host")]
+    Host,
+    #[serde(rename = "art_series")]
+    ArtSeries,
+    #[serde(rename = "reversible_card")]
+    ReversibleCard,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -365,13 +411,13 @@ pub enum SetType {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
-pub enum Preview {
+pub struct Preview {
     #[serde(rename = "previewed_at")]
-    PreviewedAt,
+    pub previewed_at: String,
     #[serde(rename = "source_uri")]
-    SourceUri,
+    pub source_uri: String,
     #[serde(rename = "source")]
-    Source,
+    pub source: String,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
@@ -460,14 +506,21 @@ pub struct Card {
     pub produced_mana: Option<Vec<String>>,
     pub reserved: bool,
     pub toughness: Option<String>,
-    pub type_line: String,
+    // API Docs say that this is not optional, but some cards don't have it based on our testing
+    // including:
+    // Grimgrin, Corpse-Born // Grimgrin, Corpse-Born
+    pub type_line: Option<String>,
 
     // "Print Fields"
     pub artist: Option<String>,
     pub artist_ids: Option<Vec<String>>,
     pub booster: bool,
     pub border_color: BorderColor,
-    pub card_back_id: ScryfallID,
+    //This is not an optional in Scryfall's API, but some cards don't have it based on our testing, including:
+    // Arlinn Kord // Arlinn, Embraced by the Moon
+    // Crystal Fragments // Summon: Alexander
+    // seems to be transform cards
+    pub card_back_id: Option<ScryfallID>,
     pub collector_number: String,
     pub content_warning: Option<bool>,
     pub digital: bool,
