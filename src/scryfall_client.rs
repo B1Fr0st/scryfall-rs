@@ -7,7 +7,7 @@ use thiserror::Error;
 #[serde(untagged)]
 pub enum ScryfallResponse {
     #[serde(rename = "card")]
-    Card(Card),
+    Card(Box<Card>),
     #[serde(rename = "error")]
     Error(ScryfallError),
 }
@@ -60,7 +60,7 @@ async fn debug_scryfall_response(response: reqwest::Response) -> ScryfallRespons
             warnings: None,
         })
         .unwrap();
-    return json;
+    json
 }
 
 pub struct RateLimit {
@@ -116,7 +116,7 @@ impl ScryfallClient {
 
         let json: ScryfallResponse = response.json().await.map_err(|e| e.to_scryfall_error())?;
         match json {
-            ScryfallResponse::Card(card) => Ok(card),
+            ScryfallResponse::Card(card) => Ok(*card),
             ScryfallResponse::Error(err) => Err(err),
         }
     }
@@ -133,7 +133,7 @@ impl ScryfallClient {
 
         let json: ScryfallResponse = response.json().await.map_err(|e| e.to_scryfall_error())?;
         match json {
-            ScryfallResponse::Card(card) => Ok(card),
+            ScryfallResponse::Card(card) => Ok(*card),
             ScryfallResponse::Error(err) => Err(err),
         }
     }
