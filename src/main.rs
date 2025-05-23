@@ -1,5 +1,6 @@
 use reqwest::ClientBuilder;
 use scryfall_rs::structs::Card;
+
 #[tokio::main]
 async fn main() {
     let client = ClientBuilder::new()
@@ -12,5 +13,6 @@ async fn main() {
         .send()
         .await
         .unwrap();
-    let _card: Card = response.json().await.unwrap();
+    let card: Card = response.json().await.unwrap();
+    dbg!(card);
 }

@@ -1,6 +1,7 @@
 #![allow(dead_code)]
 
 use serde_derive::{Deserialize, Serialize};
+use std::collections::HashMap;
 use std::fmt::Formatter;
 use std::fmt::{self, Display};
 
@@ -24,6 +25,7 @@ impl Display for OracleID {
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Colors {
     W,
     R,
@@ -32,9 +34,16 @@ pub enum Colors {
     B,
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub enum Legality {
+    #[serde(rename = "not_legal")]
     NotLegal,
+    #[serde(rename = "legal")]
     Legal,
+    #[serde(rename = "banned")]
+    Banned,
+    #[serde(rename = "restricted")]
+    Restricted,
 }
 
 impl Display for Legality {
@@ -42,10 +51,13 @@ impl Display for Legality {
         match self {
             Legality::NotLegal => write!(f, "Not Legal"),
             Legality::Legal => write!(f, "Legal"),
+            Legality::Banned => write!(f, "Banned"),
+            Legality::Restricted => write!(f, "Restricted"),
         }
     }
 }
 
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
 pub struct Legalities {
     //convert to rust enums
     standard: Legality,
@@ -136,6 +148,274 @@ pub enum Layout {
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum RelatedCardType {
+    #[serde(rename = "token")]
+    Token,
+    #[serde(rename = "meld_result")]
+    MeldResult,
+    #[serde(rename = "meld_part")]
+    MeldPart,
+    #[serde(rename = "combo_piece")]
+    ComboPiece,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub struct RelatedCard {
+    pub id: ScryfallID,
+    /// always "related_card"
+    pub object: String,
+    pub component: RelatedCardType,
+    pub name: String,
+    pub type_line: String,
+    pub uri: Url,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum BorderColor {
+    #[serde(rename = "black")]
+    Black,
+    #[serde(rename = "white")]
+    White,
+    #[serde(rename = "borderless")]
+    Borderless,
+    #[serde(rename = "yellow")]
+    Yellow,
+    #[serde(rename = "silver")]
+    Silver,
+    #[serde(rename = "gold")]
+    Gold,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+
+pub enum ImageType {
+    #[serde(rename = "png")]
+    Png,
+    #[serde(rename = "border_crop")]
+    BorderCrop,
+    #[serde(rename = "art_crop")]
+    ArtCrop,
+    #[serde(rename = "large")]
+    Large,
+    #[serde(rename = "normal")]
+    Normal,
+    #[serde(rename = "small")]
+    Small
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum Finishes {
+    #[serde(rename = "nonfoil")]
+    NonFoil,
+    #[serde(rename = "foil")]
+    Foil,
+    #[serde(rename = "etched")]
+    Etched,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum FrameLayout {
+    #[serde(rename = "1993")]
+    Frame1993,
+    #[serde(rename = "1997")]
+    Frame1997,
+    #[serde(rename = "2003")]
+    Frame2003,
+    #[serde(rename = "2015")]
+    Frame2015,
+    #[serde(rename = "future")]
+    FrameFuture,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum FrameEffect {
+    #[serde(rename = "legendary")]
+    Legendary,
+    #[serde(rename = "miracle")]
+    Miracle,
+    #[serde(rename = "enchantment")]
+    Enchantment,
+    #[serde(rename = "draft")]
+    Draft,
+    #[serde(rename = "devoid")]
+    Devoid,
+    #[serde(rename = "tombstone")]
+    Tombstone,
+    #[serde(rename = "colorshifted")]
+    Colorshifted,
+    #[serde(rename = "inverted")]
+    Inverted,
+    #[serde(rename = "sunmoondfc")]
+    SunMoonDFC,
+    #[serde(rename = "compasslanddfc")]
+    CompassLandDFC,
+    #[serde(rename = "originpwdfc")]
+    OriginPwDFC,
+    #[serde(rename = "mooneldrazidfc")]
+    MoonEldraziDFC,
+    #[serde(rename = "waxingandwaningmoondfc")]
+    WaxingAndWaningMoonDFC,
+    #[serde(rename = "showcase")]
+    Showcase,
+    #[serde(rename = "extendedart")]
+    ExtendedArt,
+    #[serde(rename = "companion")]
+    Companion,
+    #[serde(rename = "etched")]
+    Etched,
+    #[serde(rename = "snow")]
+    Snow,
+    #[serde(rename = "lesson")]
+    Lesson,
+    #[serde(rename = "shatteredglass")]
+    ShatteredGlass,
+    #[serde(rename = "convertdfc")]
+    ConvertDFC,
+    #[serde(rename = "fandfc")]
+    FanDFC,
+    #[serde(rename = "upsidedowndfc")]
+    UpsideDownDFC,
+    #[serde(rename = "spree")]
+    Spree,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum Game {
+    #[serde(rename = "paper")]
+    Paper,
+    #[serde(rename = "arena")]
+    Arena,
+    #[serde(rename = "mtgo")]
+    Mtgo,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum ImageStatus {
+    #[serde(rename = "missing")]
+    Missing,
+    #[serde(rename = "placeholder")]
+    Placeholder,
+    #[serde(rename = "lowres")]
+    LowRes,
+    #[serde(rename = "highres_scan")]
+    HighResScan,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum PriceType {
+    #[serde(rename = "usd")]
+    USD,
+    #[serde(rename = "usd_foil")]
+    USDFoil,
+    #[serde(rename = "usd_etched")]
+    USDEtched,
+    #[serde(rename = "eur")]
+    EUR,
+    #[serde(rename = "eur_foil")]
+    EURFoil,
+    #[serde(rename = "tix")]
+    Tix,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum PurchaseType {
+    #[serde(rename = "tcgplayer")]
+    TcgPlayer,
+    #[serde(rename = "cardmarket")]
+    CardMarket,
+    #[serde(rename = "cardhoarder")]
+    CardHoarder,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum Rarity{
+    #[serde(rename = "common")]
+    Common,
+    #[serde(rename = "uncommon")]
+    Uncommon,
+    #[serde(rename = "rare")]
+    Rare,
+    #[serde(rename = "special")]
+    Special,
+    #[serde(rename = "mythic")]
+    Mythic,
+    #[serde(rename = "bonus")]
+    Bonus,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum SecurityStamp{
+    #[serde(rename = "oval")]
+    Oval,
+    #[serde(rename = "triangle")]
+    Triangle,
+    #[serde(rename = "acorn")]
+    Acorn,
+    #[serde(rename = "circle")]
+    Circle,
+    #[serde(rename = "arena")]
+    Arena,
+    #[serde(rename = "heart")]
+    Heart,
+}
+
+
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum SetType {
+    Unimplemented,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum Preview {
+    #[serde(rename = "previewed_at")]
+    PreviewedAt,
+    #[serde(rename = "source_uri")]
+    SourceUri,
+    #[serde(rename = "source")]
+    Source,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub enum RelatedUriType {
+    #[serde(rename = "gatherer")]
+    Gatherer,
+    #[serde(rename = "tcgplayer_infinite_articles")]
+    TcgPlayerInfiniteArticles,
+    #[serde(rename = "tcgplayer_infinite_decks")]
+    TcgPlayerInfiniteDecks,
+    #[serde(rename = "edhrec")]
+    EdhRec,
+}
+
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CardFace {
+    pub artist: Option<String>,
+    pub artist_id: Option<String>,
+    pub cmc: Option<f32>,
+    pub color_indicator: Option<Vec<Colors>>,
+    pub colors: Option<Vec<Colors>>,
+    pub defense: Option<String>,
+    pub flavor_text: Option<String>,
+    pub illustration_id: Option<String>,
+    pub image_uris: Option<HashMap<ImageType, Url>>,
+    pub layout: Option<Layout>,
+    pub loyalty: Option<String>,
+    pub mana_cost: Option<String>,
+    pub name: String,
+    /// always "card_face"
+    pub object: String,
+    pub oracle_id: Option<OracleID>,
+    pub oracle_text: Option<String>,
+    pub power: Option<String>,
+    pub printed_name: Option<String>,
+    pub printed_text: Option<String>,
+    pub printed_type_line: Option<String>,
+    pub toughness: Option<String>,
+    pub type_line: Option<String>,
+    pub watermark: Option<String>,
+}
+#[derive(Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Card {
     // "Core Card Fields"
     pub arena_id: Option<i32>,
@@ -158,7 +438,77 @@ pub struct Card {
     pub scryfall_uri: Url,
     /// link to the card on scryfall's API
     pub uri: Url,
+
     // "Gameplay Fields"
+    pub all_parts: Option<Vec<RelatedCard>>,
+    pub card_faces: Option<Vec<CardFace>>,
+    pub cmc: Option<f32>,
+    pub color_identity: Option<Vec<Colors>>,
+    pub color_indicator: Option<Vec<Colors>>,
+    pub colors: Option<Vec<Colors>>,
+    pub defense: Option<String>,
+    pub edhrec_rank: Option<i32>,
+    pub game_changer: Option<bool>,
+    pub hand_modifier: Option<String>,
+    pub keywords: Vec<String>,
+    pub legalities: Legalities,
+    pub life_modifier: Option<String>,
+    pub loyalty: Option<String>,
+    pub mana_cost: Option<String>,
+    pub name: String,
+    pub oracle_text: Option<String>,
+    pub penny_rank: Option<i32>,
+    pub power: Option<String>,
+    pub produced_mana: Option<Vec<String>>,
+    pub reserved: bool,
+    pub toughness: Option<String>,
+    pub type_line: String,
 
     // "Print Fields"
+    pub artist: Option<String>,
+    pub artist_ids: Option<Vec<String>>,
+    pub booster: bool,
+    pub border_color: BorderColor,
+    pub card_back_id: ScryfallID,
+    pub collector_number: String,
+    pub content_warning: Option<bool>,
+    pub digital: bool,
+    pub finishes: Vec<Finishes>,
+    pub flavor_name: Option<String>,
+    pub flavor_text: Option<String>,
+    pub flavor_effects: Option<Vec<FrameEffect>>,
+    pub frame: FrameLayout,
+    pub full_art: bool,
+    pub games: Vec<Game>,
+    pub highres_image: bool,
+    pub illustration_id: Option<String>,
+    pub image_status: ImageStatus,
+    pub image_uris: Option<HashMap<ImageType, Url>>,
+    pub oversized: bool,
+    pub prices: HashMap<PriceType, Option<String>>,
+    pub printed_name: Option<String>,
+    pub printed_text: Option<String>,
+    pub printed_type_line: Option<String>,
+    pub promo: bool,
+    pub promo_types: Option<Vec<String>>,
+    pub purchase_uris: Option<HashMap<PurchaseType, Url>>,
+    pub rarity: Rarity,
+    pub related_uris: Option<HashMap<RelatedUriType, Url>>,
+    pub released_at: String, //convert to date using external crate??
+    pub reprint: bool,
+    pub scryfall_set_uri: Url,
+    pub set_name: String,
+    pub set_search_uri: Url,
+    pub set_type: String, //convert to SetType enum when we have comphrehensive list of set types
+    pub set_uri: Url,
+    pub set: String,
+    pub set_id: String,
+    pub story_spotlight: bool,
+    pub textless: bool,
+    pub variation: bool,
+    pub variation_of: Option<String>, //could be replaced with ScryfallID?
+    pub security_stamp: Option<SecurityStamp>,
+    pub watermark: Option<String>,
+    pub preview: Option<Preview>,
+
 }
