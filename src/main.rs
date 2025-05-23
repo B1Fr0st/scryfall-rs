@@ -7,7 +7,7 @@ async fn main() {
     let card = match client_card {
         Ok(card) => card,
         Err(err) => {
-            eprintln!("Error: {}", err);
+            eprintln!("Error: {err}");
             return;
         }
     };
