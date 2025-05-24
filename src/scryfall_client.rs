@@ -63,7 +63,7 @@ impl ScryfallClient {
     pub async fn card_named(&mut self, name: &str) -> Result<Card, ScryfallError> {
         let url = format!(
             "https://api.scryfall.com/cards/named?exact={}",
-            urlencoding::encode(name)
+            name
         );
         self.rate_limit.check();
         let response = self
