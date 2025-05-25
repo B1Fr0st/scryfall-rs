@@ -1,5 +1,5 @@
-pub mod scryfall_client;
+pub mod client;
 pub mod structs;
 
-pub use scryfall_client::*;
+pub use client::scryfall_client::ScryfallClient;
 pub use structs::*;
